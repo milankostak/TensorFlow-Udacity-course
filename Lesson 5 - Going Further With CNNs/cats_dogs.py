@@ -151,8 +151,6 @@ model = tf.keras.models.Sequential([
     Dense(2, activation=tf.nn.softmax)
 ])
 
-# We would also like to look at training and validation accuracy on each epoch as we train our network,
-# so we are passing in the metrics argument.
 model.compile(optimizer='adam',
               loss='sparse_categorical_crossentropy',
               metrics=['accuracy'])
