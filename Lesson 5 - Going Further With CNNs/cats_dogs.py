@@ -18,7 +18,7 @@ from tensorflow.python.keras.layers import *
 tf.logging.set_verbosity(tf.logging.ERROR)
 
 ##############################
-# prepare data
+# 1. prepare data
 ##############################
 
 _URL = 'https://storage.googleapis.com/mledu-datasets/cats_and_dogs_filtered.zip'
@@ -54,7 +54,7 @@ print("Total validation images:", total_val)
 
 
 ##############################
-# augment data
+# 2. augment data
 ##############################
 
 
@@ -129,7 +129,7 @@ val_data_gen = validation_image_generator.flow_from_directory(batch_size=BATCH_S
                                                               class_mode='binary')
 
 ##############################
-# train model
+# 3. train model
 ##############################
 
 model = tf.keras.models.Sequential([
@@ -166,7 +166,10 @@ history = model.fit_generator(
     validation_steps=int(np.ceil(total_val / float(BATCH_SIZE)))
 )
 
-# visualize results
+##############################
+# 4. visualize results
+##############################
+
 acc = history.history['acc']
 val_acc = history.history['val_acc']
 

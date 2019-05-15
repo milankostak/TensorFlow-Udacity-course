@@ -24,6 +24,10 @@ print(tf.__version__)
 # If so, the just comment out this line and run this cell again
 tf.enable_eager_execution()
 
+##############################
+# 1. prepare data
+##############################
+
 dataset, metadata = tfds.load('fashion_mnist', as_supervised=True, with_info=True)
 train_dataset, test_dataset = dataset['train'], dataset['test']
 
@@ -73,6 +77,10 @@ for (image, label) in test_dataset.take(25):
     i += 1
 plt.show()
 
+##############################
+# 2. train model
+##############################
+
 model = tf.keras.Sequential([
     tf.keras.layers.Conv2D(32, (3, 3), padding='same', activation=tf.nn.relu, input_shape=(28, 28, 1)),
     tf.keras.layers.MaxPooling2D((2, 2), strides=2),
@@ -111,7 +119,9 @@ for test_images, test_labels in test_dataset.take(1):
     print('test_labels[0]: ', test_labels[0])
 
 
-# PLOT
+##############################
+# 3. visualize results
+##############################
 
 def plot_image(index, predictions_array, true_labels, images):
     predictions_array, true_label, img = predictions_array[index], true_labels[index], images[index]
