@@ -1,15 +1,9 @@
 # exercise
 # https://colab.research.google.com/github/tensorflow/examples/blob/master/courses/udacity_intro_to_tensorflow_for_deep_learning/l08c03_moving_average.ipynb
 
-#
-# UNLIKE OTHER LESSONS, THIS AND FUTURE ONES REQUIRE TENSORFLOW 2
-#
-
 import numpy as np
 import matplotlib.pyplot as plt
 import tensorflow as tf
-
-keras = tf.keras
 
 
 def plot_series(time_p, series_p, format_p="-", start=0, end=None, label=None):
@@ -79,7 +73,7 @@ plt.figure(figsize=(10, 6))
 plot_series(time_valid, x_valid, start=0, end=150, label="Series")
 plot_series(time_valid, naive_forecast, start=1, end=151, label="Forecast")
 
-mae = keras.metrics.mean_absolute_error(x_valid, naive_forecast).numpy()
+mae = tf.keras.metrics.mean_absolute_error(x_valid, naive_forecast).numpy()
 print("Naive Forecast")
 print(mae)
 
@@ -112,7 +106,7 @@ plt.figure(figsize=(10, 6))
 plot_series(time_valid, x_valid, label="Series")
 plot_series(time_valid, moving_avg, label="Moving average (30 days)")
 
-mae = keras.metrics.mean_absolute_error(x_valid, moving_avg).numpy()
+mae = tf.keras.metrics.mean_absolute_error(x_valid, moving_avg).numpy()
 print("Moving average (30 days)")
 print(mae)
 
@@ -141,7 +135,7 @@ plot_series(time_valid, x_valid, label="Series")
 plot_series(time_valid, diff_moving_avg_plus_past, label="Forecasts")
 plt.show()
 
-mae = keras.metrics.mean_absolute_error(x_valid, diff_moving_avg_plus_past).numpy()
+mae = tf.keras.metrics.mean_absolute_error(x_valid, diff_moving_avg_plus_past).numpy()
 print("Moving average with trend and seasonality")
 print(mae)
 
@@ -152,6 +146,6 @@ plot_series(time_valid, x_valid, label="Series")
 plot_series(time_valid, diff_moving_avg_plus_smooth_past, label="Forecasts")
 plt.show()
 
-mae = keras.metrics.mean_absolute_error(x_valid, diff_moving_avg_plus_smooth_past).numpy()
+mae = tf.keras.metrics.mean_absolute_error(x_valid, diff_moving_avg_plus_smooth_past).numpy()
 print("Moving average with trend and seasonality 2")
 print(mae)
