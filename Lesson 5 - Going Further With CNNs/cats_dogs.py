@@ -5,9 +5,7 @@
 
 # conda install pillow
 
-# from __future__ import absolute_import, division, print_function, unicode_literals
-
-import os  # to read files and directory structure
+import os
 import matplotlib.pyplot as plt
 import numpy as np
 

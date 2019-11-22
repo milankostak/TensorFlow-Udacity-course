@@ -1,3 +1,4 @@
+# exercise
 # https://colab.research.google.com/github/tensorflow/examples/blob/master/courses/udacity_intro_to_tensorflow_for_deep_learning/l03c01_classifying_images_of_clothing.ipynb
 
 # Import TensorFlow and TensorFlow Datasets

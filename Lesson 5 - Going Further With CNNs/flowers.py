@@ -3,10 +3,9 @@
 # solution
 # https://colab.research.google.com/github/tensorflow/examples/blob/master/courses/udacity_intro_to_tensorflow_for_deep_learning/l05c04_exercise_flowers_with_data_augmentation_solution.ipynb
 
-import os  # to read files and directory structure
+import os
 import matplotlib.pyplot as plt
 import numpy as np
-# import shutil
 import glob
 
 import tensorflow as tf
