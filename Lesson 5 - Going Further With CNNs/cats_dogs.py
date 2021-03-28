@@ -13,24 +13,27 @@ import tensorflow as tf
 from tensorflow.python.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.python.keras.layers import *
 
-tf.logging.set_verbosity(tf.logging.ERROR)
 
 ##############################
 # 1. prepare data
 ##############################
 
-_URL = 'https://storage.googleapis.com/mledu-datasets/cats_and_dogs_filtered.zip'
-zip_dir = tf.keras.utils.get_file('cats_and_dogs_filterted.zip', origin=_URL, extract=True)
+URL = "https://storage.googleapis.com/mledu-datasets/cats_and_dogs_filtered.zip"
+zip_dir = tf.keras.utils.get_file(
+    fname="cats_and_dogs_filterted.zip",
+    origin=URL,
+    extract=True
+)
 
 # prepare folders and data count
-base_dir = os.path.join(os.path.dirname(zip_dir), 'cats_and_dogs_filtered')
-train_dir = os.path.join(base_dir, 'train')
-validation_dir = os.path.join(base_dir, 'validation')
+base_dir = os.path.join(os.path.dirname(zip_dir), "cats_and_dogs_filtered")
+train_dir = os.path.join(base_dir, "train")
+validation_dir = os.path.join(base_dir, "validation")
 
-train_cats_dir = os.path.join(train_dir, 'cats')  # directory with our training cat pictures
-train_dogs_dir = os.path.join(train_dir, 'dogs')  # directory with our training dog pictures
-validation_cats_dir = os.path.join(validation_dir, 'cats')  # directory with our validation cat pictures
-validation_dogs_dir = os.path.join(validation_dir, 'dogs')  # directory with our validation dog pictures
+train_cats_dir = os.path.join(train_dir, "cats")  # directory with our training cat pictures
+train_dogs_dir = os.path.join(train_dir, "dogs")  # directory with our training dog pictures
+validation_cats_dir = os.path.join(validation_dir, "cats")  # directory with our validation cat pictures
+validation_dogs_dir = os.path.join(validation_dir, "dogs")  # directory with our validation dog pictures
 
 num_cats_tr = len(os.listdir(train_cats_dir))
 num_dogs_tr = len(os.listdir(train_dogs_dir))
@@ -41,11 +44,11 @@ num_dogs_val = len(os.listdir(validation_dogs_dir))
 total_train = num_cats_tr + num_dogs_tr
 total_val = num_cats_val + num_dogs_val
 
-print('total training cat images:', num_cats_tr)
-print('total training dog images:', num_dogs_tr)
+print("Total training cat images:", num_cats_tr)
+print("Total training dog images:", num_dogs_tr)
 
-print('total validation cat images:', num_cats_val)
-print('total validation dog images:', num_dogs_val)
+print("Total validation cat images:", num_cats_val)
+print("Total validation dog images:", num_dogs_val)
 print("--")
 print("Total training images:", total_train)
 print("Total validation images:", total_val)
@@ -66,8 +69,10 @@ def plot_images(images_arr):
     plt.show()
 
 
-BATCH_SIZE = 100  # Number of training examples to process before updating our models variables
-IMG_SHAPE = 150  # Our training data consists of images with width of 150 pixels and height of 150 pixels
+# Number of training examples to process before updating our models variables
+BATCH_SIZE = 100
+# Our training data consists of images with width of 150 pixels and height of 150 pixels
+IMG_SHAPE = 150
 
 # 1. Read images from the disk
 # 2. Decode contents of these images and convert it into proper grid format as per their RGB content
@@ -75,13 +80,15 @@ IMG_SHAPE = 150  # Our training data consists of images with width of 150 pixels
 # 4. Rescale the tensors from values between 0 and 255 to values between 0 and 1,
 #    as neural networks prefer to deal with small input values.
 
-# train_image_generator = ImageDataGenerator(rescale=1. / 255)  # Generator for our training data
-# train_image_generator = ImageDataGenerator(rescale=1. / 255)  # Generator for our training data
-# train_data_gen = train_image_generator.flow_from_directory(batch_size=BATCH_SIZE,
-#                                                            directory=train_dir,
-#                                                            shuffle=True,
-#                                                            target_size=(IMG_SHAPE, IMG_SHAPE),  # (150,150)
-#                                                            class_mode='binary')
+# Generator for our training data
+# train_image_generator = ImageDataGenerator(rescale=1. / 255)
+# train_data_gen = train_image_generator.flow_from_directory(
+#     batch_size=BATCH_SIZE,
+#     directory=train_dir,
+#     shuffle=True,
+#     target_size=(IMG_SHAPE, IMG_SHAPE),  # (150,150)
+#     class_mode='binary'
+# )
 
 
 # sample_training_images, _ = next(train_data_gen)
@@ -96,10 +103,12 @@ IMG_SHAPE = 150  # Our training data consists of images with width of 150 pixels
 # apply Zoom augmentation to our dataset, zooming images up to 50% randomly.
 # image_gen = ImageDataGenerator(rescale=1. / 255, zoom_range=0.5)
 
-# train_data_gen = image_gen.flow_from_directory(batch_size=BATCH_SIZE,
-#                                                directory=train_dir,
-#                                                shuffle=True,
-#                                                target_size=(IMG_SHAPE, IMG_SHAPE))
+# train_data_gen = image_gen.flow_from_directory(
+#     batch_size=BATCH_SIZE,
+#     directory=train_dir,
+#     shuffle=True,
+#     target_size=(IMG_SHAPE, IMG_SHAPE)
+# )
 
 train_image_generator = ImageDataGenerator(
     rescale=1. / 255,
@@ -109,22 +118,28 @@ train_image_generator = ImageDataGenerator(
     shear_range=0.2,
     zoom_range=0.2,
     horizontal_flip=True,
-    fill_mode='nearest')
+    fill_mode='nearest'
+)
 
-train_data_gen = train_image_generator.flow_from_directory(batch_size=BATCH_SIZE,
-                                                           directory=train_dir,
-                                                           shuffle=True,
-                                                           target_size=(IMG_SHAPE, IMG_SHAPE),
-                                                           class_mode='binary')
+train_data_gen = train_image_generator.flow_from_directory(
+    batch_size=BATCH_SIZE,
+    directory=train_dir,
+    shuffle=True,
+    target_size=(IMG_SHAPE, IMG_SHAPE),
+    class_mode='binary'
+)
 augmented_images = [train_data_gen[0][0][0] for i in range(5)]
 plot_images(augmented_images)
 
-validation_image_generator = ImageDataGenerator(rescale=1. / 255)  # Generator for our validation data
-val_data_gen = validation_image_generator.flow_from_directory(batch_size=BATCH_SIZE,
-                                                              directory=validation_dir,
-                                                              shuffle=False,
-                                                              target_size=(IMG_SHAPE, IMG_SHAPE),  # (150,150)
-                                                              class_mode='binary')
+# Generator for our validation data
+validation_image_generator = ImageDataGenerator(rescale=1. / 255)
+val_data_gen = validation_image_generator.flow_from_directory(
+    batch_size=BATCH_SIZE,
+    directory=validation_dir,
+    shuffle=False,
+    target_size=(IMG_SHAPE, IMG_SHAPE),  # (150,150)
+    class_mode='binary'
+)
 
 ##############################
 # 3. train model
@@ -149,14 +164,16 @@ model = tf.keras.models.Sequential([
     Dense(2, activation=tf.nn.softmax)
 ])
 
-model.compile(optimizer='adam',
-              loss='sparse_categorical_crossentropy',
-              metrics=['accuracy'])
+model.compile(
+    optimizer='adam',
+    loss='sparse_categorical_crossentropy',
+    metrics=['accuracy']
+)
 
 model.summary()
 
 EPOCHS = 5
-history = model.fit_generator(
+history = model.fit(
     train_data_gen,
     steps_per_epoch=int(np.ceil(total_train / float(BATCH_SIZE))),
     epochs=EPOCHS,
@@ -168,25 +185,25 @@ history = model.fit_generator(
 # 4. visualize results
 ##############################
 
-acc = history.history['acc']
-val_acc = history.history['val_acc']
+acc = history.history["accuracy"]
+val_acc = history.history["val_accuracy"]
 
-loss = history.history['loss']
-val_loss = history.history['val_loss']
+loss = history.history["loss"]
+val_loss = history.history["val_loss"]
 
 epochs_range = range(EPOCHS)
 
 plt.figure(figsize=(8, 8))
 plt.subplot(1, 2, 1)
-plt.plot(epochs_range, acc, label='Training Accuracy')
-plt.plot(epochs_range, val_acc, label='Validation Accuracy')
-plt.legend(loc='lower right')
-plt.title('Training and Validation Accuracy')
+plt.plot(epochs_range, acc, label="Training Accuracy")
+plt.plot(epochs_range, val_acc, label="Validation Accuracy")
+plt.legend(loc="lower right")
+plt.title("Training and Validation Accuracy")
 
 plt.subplot(1, 2, 2)
-plt.plot(epochs_range, loss, label='Training Loss')
-plt.plot(epochs_range, val_loss, label='Validation Loss')
-plt.legend(loc='upper right')
-plt.title('Training and Validation Loss')
-# plt.savefig('./foo.png')
+plt.plot(epochs_range, loss, label="Training Loss")
+plt.plot(epochs_range, val_loss, label="Validation Loss")
+plt.legend(loc="upper right")
+plt.title("Training and Validation Loss")
+# plt.savefig("./foo.png")
 plt.show()
