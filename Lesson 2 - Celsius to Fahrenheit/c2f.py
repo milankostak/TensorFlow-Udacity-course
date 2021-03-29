@@ -1,8 +1,8 @@
 # https://colab.research.google.com/github/tensorflow/examples/blob/master/courses/udacity_intro_to_tensorflow_for_deep_learning/l02c01_celsius_to_fahrenheit.ipynb
 
-import tensorflow as tf
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
+import tensorflow as tf
 
 # generate train data
 celsius = np.array([-40, -10, 0, 8, 15, 22, 38], dtype=float)

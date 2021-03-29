@@ -1,6 +1,6 @@
-import tensorflow as tf
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
+import tensorflow as tf
 
 data_input = np.array([
     # [1, 7, 12], [2, -5, -6], [-7, 15, 1], [-1, 0, 1],
