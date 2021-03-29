@@ -2,8 +2,6 @@ import tensorflow as tf
 import numpy as np
 import matplotlib.pyplot as plt
 
-tf.logging.set_verbosity(tf.logging.ERROR)
-
 data_input = np.array([
     # [1, 7, 12], [2, -5, -6], [-7, 15, 1], [-1, 0, 1],
     # [1, -10, 25], [50, 120, 10], [1, -1, -50], [1, -2, -5],
@@ -36,12 +34,12 @@ model = tf.keras.Sequential([
     tf.keras.layers.Dense(units=1)  # output
 ])
 
-model.compile(loss='mean_squared_error', optimizer=tf.keras.optimizers.Adam(0.1))
+model.compile(loss="mse", optimizer=tf.keras.optimizers.Adam(0.1))
 
 history = model.fit(data_input, data_output, epochs=100, verbose=False)
 print("Finished training the model")
 
-plt.xlabel('Epoch Number')
+plt.xlabel("Epoch Number")
 plt.ylabel("Loss Magnitude")
 plt.plot(history.history['loss'])
 plt.show()
