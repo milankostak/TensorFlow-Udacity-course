@@ -3,15 +3,14 @@
 # solution
 # https://colab.research.google.com/github/tensorflow/examples/blob/master/courses/udacity_intro_to_tensorflow_for_deep_learning/l05c04_exercise_flowers_with_data_augmentation_solution.ipynb
 
+import glob
 import os
+
 import matplotlib.pyplot as plt
 import numpy as np
-import glob
-
 import tensorflow as tf
-from tensorflow.python.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.python.keras.layers import *
-
+from tensorflow.python.keras.preprocessing.image import ImageDataGenerator
 
 ##############################
 # 1. prepare data

@@ -6,13 +6,13 @@
 # conda install pillow
 
 import os
+
 import matplotlib.pyplot as plt
 import numpy as np
-
 import tensorflow as tf
-from tensorflow.python.keras.preprocessing.image import ImageDataGenerator
+from PIL import Image
 from tensorflow.python.keras.layers import *
-
+from tensorflow.python.keras.preprocessing.image import ImageDataGenerator
 
 ##############################
 # 1. prepare data
@@ -207,3 +207,40 @@ plt.legend(loc="upper right")
 plt.title("Training and Validation Loss")
 # plt.savefig("./foo.png")
 plt.show()
+
+##############################
+# 5. experimenting
+##############################
+
+
+def predict_image(img):
+    img = Image.open(img)
+    # img.show()
+
+    new_size = (IMG_SHAPE, IMG_SHAPE)
+    img = img.resize(new_size)
+    img.show()
+
+    img_array = np.array(img)
+    # print(img_array.shape)
+    img_array = img_array.reshape((1, IMG_SHAPE, IMG_SHAPE, 3))  # 3 -> color RGB image
+    img_array = img_array.astype(np.float)
+    # print(img_array.shape)
+
+    result = model.predict(img_array)
+    print(result)
+
+
+dog_url = "https://upload.wikimedia.org/wikipedia/commons/9/99/Brooks_Chase_Ranger_of_Jolly_Dogs_Jack_Russell.jpg"
+dog = tf.keras.utils.get_file("dog.jpg", origin=dog_url)
+predict_image(dog)
+
+cat_url = "https://upload.wikimedia.org/wikipedia/commons/9/9b/Domestic_cat_cropped.jpg"
+cat = tf.keras.utils.get_file("cat3.jpg", origin=cat_url)
+predict_image(cat)
+
+elephant_url = "https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/African_Bush_Elephant.jpg/1200px-African_Bush_Elephant.jpg"
+elephant = tf.keras.utils.get_file("elephant.jpg", origin=elephant_url)
+predict_image(elephant)
+
+# later, try other images!
