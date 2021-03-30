@@ -11,8 +11,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import tensorflow as tf
 from PIL import Image
-from tensorflow.python.keras.layers import *
-from tensorflow.python.keras.preprocessing.image import ImageDataGenerator
+from tensorflow.keras.layers import *
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
 ##############################
 # 1. prepare data
@@ -185,6 +185,16 @@ history = model.fit(
 # 4. visualize results
 ##############################
 
+# visualize convolutional kernels
+print(model.layers[0].get_weights()[0])
+weights = model.layers[0].get_weights()[0][:, :, 0, :]
+
+for i in range(0, 16):
+    plt.subplot(4, 4, i + 1)
+    plt.imshow(weights[:, :, i], interpolation="nearest", cmap="gray")
+plt.show()
+print(weights.shape)
+
 acc = history.history["accuracy"]
 val_acc = history.history["val_accuracy"]
 
@@ -208,12 +218,13 @@ plt.title("Training and Validation Loss")
 # plt.savefig("./foo.png")
 plt.show()
 
+
 ##############################
 # 5. experimenting
 ##############################
 
 
-def predict_image(img):
+def preprocess_image(img):
     img = Image.open(img)
     # img.show()
 
@@ -223,24 +234,48 @@ def predict_image(img):
 
     img_array = np.array(img)
     # print(img_array.shape)
-    img_array = img_array.reshape((1, IMG_SHAPE, IMG_SHAPE, 3))  # 3 -> color RGB image
     img_array = img_array.astype(np.float)
+    img_array /= 255
+    img_array = img_array.reshape((1, IMG_SHAPE, IMG_SHAPE, 3))  # 3 -> color RGB image
     # print(img_array.shape)
+    return img_array
 
+
+def predict_image(img_array):
     result = model.predict(img_array)
     print(result)
+    return result
 
 
 dog_url = "https://upload.wikimedia.org/wikipedia/commons/9/99/Brooks_Chase_Ranger_of_Jolly_Dogs_Jack_Russell.jpg"
 dog = tf.keras.utils.get_file("dog.jpg", origin=dog_url)
-predict_image(dog)
+predict_image(preprocess_image(dog))
 
 cat_url = "https://upload.wikimedia.org/wikipedia/commons/9/9b/Domestic_cat_cropped.jpg"
 cat = tf.keras.utils.get_file("cat3.jpg", origin=cat_url)
-predict_image(cat)
+predict_image(preprocess_image(cat))
 
 elephant_url = "https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/African_Bush_Elephant.jpg/1200px-African_Bush_Elephant.jpg"
 elephant = tf.keras.utils.get_file("elephant.jpg", origin=elephant_url)
-predict_image(elephant)
+predict_image(preprocess_image(elephant))
 
 # later, try other images!
+
+
+# visualize image processed by the first layer of convolutional kernels
+# redefine the model to output after the first layer
+model2 = tf.keras.Model(inputs=model.inputs, outputs=model.layers[0].output)
+# model2.summary()
+
+dog_array = preprocess_image(dog)
+feature_maps = model2.predict(dog_array)
+
+plt.figure(figsize=(15, 15))
+square = 4
+for i in range(square):
+    for j in range(square):
+        index = i * square + j
+        plt.subplot(square, square, index + 1)
+        plt.imshow(feature_maps[0, :, :, index], cmap="gray")
+
+plt.show()
