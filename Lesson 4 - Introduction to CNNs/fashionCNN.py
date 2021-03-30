@@ -1,29 +1,12 @@
 # exercise
 # https://colab.research.google.com/github/tensorflow/examples/blob/master/courses/udacity_intro_to_tensorflow_for_deep_learning/l04c01_image_classification_with_cnns.ipynb
 
-# Import TensorFlow and TensorFlow Datasets
+import math
+
+import matplotlib.pyplot as plt
+import numpy as np
 import tensorflow as tf
 import tensorflow_datasets as tfds
-
-# Helper libraries
-import math
-import numpy as np
-import matplotlib.pyplot as plt
-
-# Improve progress bar display
-import tqdm
-import tqdm.auto
-
-tqdm.tqdm = tqdm.auto.tqdm
-
-tf.logging.set_verbosity(tf.logging.ERROR)
-
-print(tf.__version__)
-
-# This will go away in the future.
-# If this gives an error, you might be running TensorFlow 2 or above
-# If so, the just comment out this line and run this cell again
-tf.enable_eager_execution()
 
 ##############################
 # 1. prepare data
@@ -37,8 +20,8 @@ class_names = ['T-shirt/top', 'Trouser', 'Pullover', 'Dress', 'Coat',
 
 num_train_examples = metadata.splits['train'].num_examples
 num_test_examples = metadata.splits['test'].num_examples
-print("Number of training examples: {}".format(num_train_examples))
-print("Number of test examples:     {}".format(num_test_examples))
+print(f"Number of training examples: {num_train_examples}")
+print(f"Number of test examples:     {num_test_examples}")
 
 
 def normalize(images, labels):
@@ -58,7 +41,7 @@ image = image.numpy().reshape((28, 28))
 
 # Plot the image - voila a piece of fashion clothing
 plt.figure()
-plt.imshow(image, cmap=plt.cm.binary)
+plt.imshow(image, cmap="binary")
 plt.colorbar()
 plt.grid(False)
 plt.show()
@@ -73,7 +56,7 @@ for (image, label) in test_dataset.take(25):
     plt.xticks([])
     plt.yticks([])
     plt.grid(False)
-    plt.imshow(image, cmap=plt.cm.binary)
+    plt.imshow(image, cmap="binary")
     plt.xlabel(class_names[label])
     i += 1
 plt.show()
@@ -92,20 +75,25 @@ model = tf.keras.Sequential([
     tf.keras.layers.Dense(10, activation=tf.nn.softmax)
 ])
 
-model.compile(optimizer='adam',
-              loss='sparse_categorical_crossentropy',
-              metrics=['accuracy'])
+# We would also like to look at training (and validation) accuracy on each epoch as we train our network,
+# so we are passing in the metrics argument.
+model.compile(
+    optimizer='adam',
+    loss='sparse_categorical_crossentropy',
+    metrics=['accuracy']
+)
 
 BATCH_SIZE = 32
+EPOCH = 5
 train_dataset = train_dataset.repeat().shuffle(num_train_examples).batch(BATCH_SIZE)
 test_dataset = test_dataset.batch(BATCH_SIZE)
 
-model.fit(train_dataset, epochs=5, steps_per_epoch=math.ceil(num_train_examples / BATCH_SIZE))
+model.fit(train_dataset, epochs=EPOCH, steps_per_epoch=math.ceil(num_train_examples / BATCH_SIZE))
 
 # EVALUATE
 
 test_loss, test_accuracy = model.evaluate(test_dataset, steps=math.ceil(num_test_examples / 32))
-print('\nAccuracy on test dataset:', test_accuracy)
+print("Accuracy on test dataset:", test_accuracy)
 
 # TEST
 
@@ -130,7 +118,7 @@ def plot_image(index, predictions_array, true_labels, images):
     plt.xticks([])
     plt.yticks([])
 
-    plt.imshow(img[..., 0], cmap=plt.cm.binary)
+    plt.imshow(img[..., 0], cmap="binary")
 
     predicted_label = np.argmax(predictions_array)
     if predicted_label == true_label:
@@ -138,10 +126,8 @@ def plot_image(index, predictions_array, true_labels, images):
     else:
         color = 'red'
 
-    plt.xlabel("{} {:2.0f}% ({})".format(class_names[predicted_label],
-                                         100 * np.max(predictions_array),
-                                         class_names[true_label]),
-               color=color)
+    xLabel = "{} {:2.0f}% ({})".format(class_names[predicted_label], 100 * np.max(predictions_array), class_names[true_label])
+    plt.xlabel(xlabel=xLabel, color=color)
 
 
 def plot_value_array(index, predictions_array, true_label):
