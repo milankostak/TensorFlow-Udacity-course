@@ -9,8 +9,9 @@ import os
 import matplotlib.pyplot as plt
 import numpy as np
 import tensorflow as tf
-from tensorflow.python.keras.layers import *
-from tensorflow.python.keras.preprocessing.image import ImageDataGenerator
+from tensorflow.keras.layers import *
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
+import shutil
 
 ##############################
 # 1. prepare data
@@ -28,25 +29,26 @@ base_dir = os.path.join(os.path.dirname(zip_file), "flower_photos")
 
 classes = ["roses", "daisy", "dandelion", "sunflowers", "tulips"]
 
-# divide images to training and validation sets (run only once)
-# import shutil
-# for cl in classes:
-#     img_path = os.path.join(base_dir, cl)
-#     images = glob.glob(img_path + '/*.jpg')
-#     print("{}: {} images".format(cl, len(images)))
-#     train, val = images[:round(len(images) * 0.8)], images[round(len(images) * 0.8):]
-#
-#     for t in train:
-#         if not os.path.exists(os.path.join(base_dir, 'train', cl)):
-#             os.makedirs(os.path.join(base_dir, 'train', cl))
-#         shutil.move(t, os.path.join(base_dir, 'train', cl))
-#
-#     for v in val:
-#         if not os.path.exists(os.path.join(base_dir, 'val', cl)):
-#             os.makedirs(os.path.join(base_dir, 'val', cl))
-#         shutil.move(v, os.path.join(base_dir, 'val', cl))
-
 train_dir = os.path.join(base_dir, "train")
+
+if not os.path.exists(train_dir):
+    # divide images to training and validation sets (run only once)
+    for cl in classes:
+        img_path = os.path.join(base_dir, cl)
+        images = glob.glob(img_path + '/*.jpg')
+        print(f"{cl}: {len(images)} images")
+        train, val = images[:round(len(images) * 0.8)], images[round(len(images) * 0.8):]
+
+        for t in train:
+            if not os.path.exists(os.path.join(base_dir, 'train', cl)):
+                os.makedirs(os.path.join(base_dir, 'train', cl))
+            shutil.move(t, os.path.join(base_dir, 'train', cl))
+
+        for v in val:
+            if not os.path.exists(os.path.join(base_dir, 'val', cl)):
+                os.makedirs(os.path.join(base_dir, 'val', cl))
+            shutil.move(v, os.path.join(base_dir, 'val', cl))
+
 total_train = 0
 for cl in classes:
     sub_dir = os.path.join(train_dir, cl)
@@ -63,6 +65,7 @@ for cl in classes:
 ##############################
 # 2. augment data
 ##############################
+
 
 def plot_images(images_arr):
     fig, axes = plt.subplots(1, 5, figsize=(20, 20))
