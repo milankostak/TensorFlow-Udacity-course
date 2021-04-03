@@ -87,7 +87,7 @@ IMG_SHAPE = 150
 #     directory=train_dir,
 #     shuffle=True,
 #     target_size=(IMG_SHAPE, IMG_SHAPE),  # (150,150)
-#     class_mode='binary'
+#     class_mode="binary"
 # )
 
 
@@ -118,7 +118,7 @@ train_image_generator = ImageDataGenerator(
     shear_range=0.2,
     zoom_range=0.2,
     horizontal_flip=True,
-    fill_mode='nearest'
+    fill_mode="nearest"  # {"constant", "nearest", "reflect", or "wrap"}
 )
 
 train_data_gen = train_image_generator.flow_from_directory(
@@ -126,7 +126,7 @@ train_data_gen = train_image_generator.flow_from_directory(
     directory=train_dir,
     shuffle=True,
     target_size=(IMG_SHAPE, IMG_SHAPE),
-    class_mode='binary'
+    class_mode="binary"  # "categorical", "binary", "sparse"
 )
 augmented_images = [train_data_gen[0][0][0] for i in range(5)]
 plot_images(augmented_images)
@@ -138,7 +138,7 @@ val_data_gen = validation_image_generator.flow_from_directory(
     directory=validation_dir,
     shuffle=False,
     target_size=(IMG_SHAPE, IMG_SHAPE),  # (150,150)
-    class_mode='binary'
+    class_mode="binary"
 )
 
 ##############################
@@ -165,9 +165,9 @@ model = tf.keras.models.Sequential([
 ])
 
 model.compile(
-    optimizer='adam',
-    loss='sparse_categorical_crossentropy',
-    metrics=['accuracy']
+    optimizer="adam",
+    loss="sparse_categorical_crossentropy",
+    metrics=["accuracy"]
 )
 
 model.summary()
