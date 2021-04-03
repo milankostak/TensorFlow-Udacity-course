@@ -35,19 +35,19 @@ if not os.path.exists(train_dir):
     # divide images to training and validation sets (run only once)
     for cl in classes:
         img_path = os.path.join(base_dir, cl)
-        images = glob.glob(img_path + '/*.jpg')
+        images = glob.glob(img_path + "/*.jpg")
         print(f"{cl}: {len(images)} images")
         train, val = images[:round(len(images) * 0.8)], images[round(len(images) * 0.8):]
 
         for t in train:
-            if not os.path.exists(os.path.join(base_dir, 'train', cl)):
-                os.makedirs(os.path.join(base_dir, 'train', cl))
-            shutil.move(t, os.path.join(base_dir, 'train', cl))
+            if not os.path.exists(os.path.join(base_dir, "train", cl)):
+                os.makedirs(os.path.join(base_dir, "train", cl))
+            shutil.move(t, os.path.join(base_dir, "train", cl))
 
         for v in val:
-            if not os.path.exists(os.path.join(base_dir, 'val', cl)):
-                os.makedirs(os.path.join(base_dir, 'val', cl))
-            shutil.move(v, os.path.join(base_dir, 'val', cl))
+            if not os.path.exists(os.path.join(base_dir, "val", cl)):
+                os.makedirs(os.path.join(base_dir, "val", cl))
+            shutil.move(v, os.path.join(base_dir, "val", cl))
 
 total_train = 0
 for cl in classes:
@@ -133,9 +133,9 @@ model = tf.keras.models.Sequential([
 ])
 
 model.compile(
-    optimizer='adam',
-    loss='sparse_categorical_crossentropy',
-    metrics=['accuracy']
+    optimizer="adam",
+    loss="sparse_categorical_crossentropy",
+    metrics=["accuracy"]
 )
 
 model.summary()
