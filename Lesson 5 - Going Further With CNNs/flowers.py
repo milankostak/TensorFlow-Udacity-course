@@ -87,7 +87,7 @@ train_image_generator = ImageDataGenerator(
     shear_range=0.2,
     zoom_range=0.2,
     horizontal_flip=True,
-    fill_mode='nearest'
+    fill_mode="nearest"  # {"constant", "nearest", "reflect", or "wrap"}
 )
 
 train_data_gen = train_image_generator.flow_from_directory(
@@ -95,7 +95,7 @@ train_data_gen = train_image_generator.flow_from_directory(
     directory=train_dir,
     shuffle=True,
     target_size=(IMG_SHAPE, IMG_SHAPE),
-    class_mode='binary'
+    class_mode="sparse"  # "categorical", "binary", "sparse"
 )
 
 augmented_images = [train_data_gen[0][0][0] for i in range(5)]
@@ -107,7 +107,7 @@ val_data_gen = validation_image_generator.flow_from_directory(
     directory=validation_dir,
     shuffle=False,
     target_size=(IMG_SHAPE, IMG_SHAPE),  # (150,150)
-    class_mode='binary'
+    class_mode="sparse"
 )
 
 ##############################
@@ -115,13 +115,13 @@ val_data_gen = validation_image_generator.flow_from_directory(
 ##############################
 
 model = tf.keras.models.Sequential([
-    Conv2D(32, (3, 3), activation=tf.nn.relu, input_shape=(150, 150, 3)),
+    Conv2D(32, (3, 3), padding="same", activation=tf.nn.relu, input_shape=(IMG_SHAPE, IMG_SHAPE, 3)),
     MaxPooling2D(2, 2),
 
-    Conv2D(64, (3, 3), activation=tf.nn.relu),
+    Conv2D(64, (3, 3), padding="same", activation=tf.nn.relu),
     MaxPooling2D(2, 2),
 
-    Conv2D(128, (3, 3), activation=tf.nn.relu),
+    Conv2D(128, (3, 3), padding="same", activation=tf.nn.relu),
     MaxPooling2D(2, 2),
 
     Flatten(),
@@ -129,7 +129,7 @@ model = tf.keras.models.Sequential([
     Dense(512, activation=tf.nn.relu),
 
     Dropout(0.2),
-    Dense(2, activation=tf.nn.softmax)
+    Dense(5, activation=tf.nn.softmax)
 ])
 
 model.compile(
