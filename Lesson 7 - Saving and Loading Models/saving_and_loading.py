@@ -18,7 +18,7 @@ tfds.disable_progress_bar()
 
 splits = tfds.Split.ALL.subsplit(weighted=(80, 20))
 
-splits, info = tfds.load('cats_vs_dogs', with_info=True, as_supervised=True, split=splits)
+splits, info = tfds.load("cats_vs_dogs", with_info=True, as_supervised=True, split=splits)
 
 (train_examples, validation_examples) = splits
 
@@ -29,7 +29,7 @@ def format_image(image, label):
     return image, label
 
 
-num_examples = info.splits['train'].num_examples
+num_examples = info.splits["train"].num_examples
 
 BATCH_SIZE = 32
 IMAGE_RES = 224
@@ -48,15 +48,15 @@ feature_extractor.trainable = False
 
 model = tf.keras.Sequential([
     feature_extractor,
-    layers.Dense(2, activation='softmax')
+    layers.Dense(2, activation="softmax")
 ])
 
 model.summary()
 
 model.compile(
-    optimizer='adam',
-    loss=tf.losses.SparseCategoricalCrossentropy(),
-    metrics=['accuracy']
+    optimizer="adam",
+    loss="sparse_categorical_crossentropy",
+    metrics=["accuracy"]
 )
 
 EPOCHS = 3
@@ -66,7 +66,7 @@ history = model.fit(train_batches, epochs=EPOCHS, validation_data=validation_bat
 # Check Predictions
 #
 
-class_names = np.array(info.features['label'].names)
+class_names = np.array(info.features["label"].names)
 print("Class names: ", class_names)
 
 image_batch, label_batch = next(iter(train_batches.take(1)))
@@ -88,7 +88,7 @@ for n in range(30):
     plt.imshow(image_batch[n])
     color = "blue" if predicted_ids[n] == label_batch[n] else "red"
     plt.title(predicted_class_names[n].title(), color=color)
-    plt.axis('off')
+    plt.axis("off")
 _ = plt.suptitle("Model predictions (blue: correct, red: incorrect)")
 plt.show()
 
@@ -110,7 +110,7 @@ model.save(export_path_keras)
 reloaded = tf.keras.models.load_model(
     export_path_keras,
     # `custom_objects` tells keras how to load a `hub.KerasLayer`
-    custom_objects={'KerasLayer': hub.KerasLayer}
+    custom_objects={"KerasLayer": hub.KerasLayer}
 )
 
 reloaded.summary()
@@ -158,7 +158,7 @@ tf.saved_model.save(model, export_path_sm)
 
 reload_sm_keras = tf.keras.models.load_model(
     export_path_sm,
-    custom_objects={'KerasLayer': hub.KerasLayer}
+    custom_objects={"KerasLayer": hub.KerasLayer}
 )
 
 reload_sm_keras.summary()
