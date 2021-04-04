@@ -12,14 +12,14 @@ import tensorflow_datasets as tfds
 # 1. prepare data
 ##############################
 
-dataset, metadata = tfds.load('fashion_mnist', as_supervised=True, with_info=True)
-train_dataset, test_dataset = dataset['train'], dataset['test']
+dataset, metadata = tfds.load("fashion_mnist", as_supervised=True, with_info=True)
+train_dataset, test_dataset = dataset["train"], dataset["test"]
 
-class_names = ['T-shirt/top', 'Trouser', 'Pullover', 'Dress', 'Coat',
-               'Sandal', 'Shirt', 'Sneaker', 'Bag', 'Ankle boot']
+class_names = ["T-shirt/top", "Trouser", "Pullover", "Dress", "Coat",
+               "Sandal", "Shirt", "Sneaker", "Bag", "Ankle boot"]
 
-num_train_examples = metadata.splits['train'].num_examples
-num_test_examples = metadata.splits['test'].num_examples
+num_train_examples = metadata.splits["train"].num_examples
+num_test_examples = metadata.splits["test"].num_examples
 print(f"Number of training examples: {num_train_examples}")
 print(f"Number of test examples:     {num_test_examples}")
 
@@ -75,9 +75,9 @@ model = tf.keras.Sequential([
 # We would also like to look at training (and validation) accuracy on each epoch as we train our network,
 # so we are passing in the metrics argument.
 model.compile(
-    optimizer='adam',
-    loss='sparse_categorical_crossentropy',
-    metrics=['accuracy']
+    optimizer="adam",
+    loss="sparse_categorical_crossentropy",
+    metrics=["accuracy"]
 )
 
 BATCH_SIZE = 32
@@ -99,10 +99,10 @@ for test_images, test_labels in test_dataset.take(1):
     test_labels = test_labels.numpy()
     predictions = model.predict(test_images)
 
-    print('predictions.shape: ', predictions.shape)
-    print('predictions[0]: ', predictions[0])
-    print('np.argmax(predictions[0]): ', np.argmax(predictions[0]))
-    print('test_labels[0]: ', test_labels[0])
+    print("predictions.shape: ", predictions.shape)
+    print("predictions[0]: ", predictions[0])
+    print("np.argmax(predictions[0]): ", np.argmax(predictions[0]))
+    print("test_labels[0]: ", test_labels[0])
 
 
 ##############################
@@ -120,9 +120,9 @@ def plot_image(index, predictions_array, true_labels, images):
 
     predicted_label = np.argmax(predictions_array)
     if predicted_label == true_label:
-        color = 'blue'
+        color = "blue"
     else:
-        color = 'red'
+        color = "red"
 
     xLabel = "{} {:2.0f}% ({})".format(class_names[predicted_label], 100 * np.max(predictions_array), class_names[true_label])
     plt.xlabel(xlabel=xLabel, color=color)
@@ -137,8 +137,8 @@ def plot_value_array(index, predictions_array, true_label):
     plt.ylim([0, 1])
     predicted_label = np.argmax(predictions_array)
 
-    this_plot[predicted_label].set_color('red')
-    this_plot[true_label].set_color('blue')
+    this_plot[predicted_label].set_color("red")
+    this_plot[true_label].set_color("blue")
 
 
 ii = 0
