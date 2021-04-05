@@ -27,7 +27,7 @@ zip_file = tf.keras.utils.get_file(
 
 base_dir = os.path.join(os.path.dirname(zip_file), "flower_photos")
 
-classes = ["roses", "daisy", "dandelion", "sunflowers", "tulips"]
+classes = ["daisy", "dandelion", "roses", "sunflowers", "tulips"]  # output classes will be also alphabetical
 
 train_dir = os.path.join(base_dir, "train")
 

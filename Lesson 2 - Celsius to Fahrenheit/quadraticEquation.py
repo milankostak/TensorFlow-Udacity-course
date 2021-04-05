@@ -41,7 +41,7 @@ print("Finished training the model")
 
 plt.xlabel("Epoch Number")
 plt.ylabel("Loss Magnitude")
-plt.plot(history.history['loss'])
+plt.plot(history.history["loss"])
 plt.show()
 
 print(model.predict(np.array([[6, 6, -1]])))  # 7.74
