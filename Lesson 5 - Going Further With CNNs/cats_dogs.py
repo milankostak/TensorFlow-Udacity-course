@@ -261,7 +261,7 @@ predict_image(preprocess_image(elephant))
 
 # later, try other images!
 
-
+# https://towardsdatascience.com/understanding-your-convolution-network-with-visualizations-a4883441533b
 # visualize image processed by the first layer of convolutional kernels
 # redefine the model to output after the first layer
 model2 = tf.keras.Model(inputs=model.inputs, outputs=model.layers[0].output)
